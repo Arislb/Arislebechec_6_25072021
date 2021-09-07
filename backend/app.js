@@ -2,6 +2,10 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
+//Import des routes utilisé
+const userRoutes = require("./routes/user");
+
+// Chemin pour ce connecté et verifier la connection a MongoDB
 mongoose
   .connect(
     "mongodb+srv://Usertest:0000User@cluster0.fwqmh.mongodb.net/Piquante?retryWrites=true&w=majority",
@@ -12,6 +16,7 @@ mongoose
 
 const app = express();
 
+// rajout a l'entête des headers pour autoriser tout le monde  d'utiliser l'API
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -26,6 +31,9 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
+
+//enregistrement des Applications utilisé
+app.use("/api/auth", userRoutes);
 
 app.use((req, res) => {
   res.json({ message: "Votre requête a bien été reçue !" });
