@@ -1,4 +1,5 @@
 const Sauce = require("../models/Sauce");
+const fs = require("fs");
 
 exports.createSauce = (req, res, next) => {
   const sauceObject = JSON.parse(req.body.sauce);
@@ -46,7 +47,7 @@ exports.modifySauce = (req, res, next) => {
         }`,
       }
     : { ...req.body };
-  Sauce.updateOne({ _id: req.params.id }, sauce)
+  Sauce.updateOne({ _id: req.params.id }, sauceObject)
     .then(() => {
       res.status(201).json({
         message: "Sauce updated successfully!",
