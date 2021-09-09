@@ -3,6 +3,10 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const path = require("path");
 
+const helmet = require("helmet");
+const hpp = require("hpp");
+const expressmongoSani = require("express-mongo-sanitize");
+
 //Import des routes utilisé
 const stuffRoutes = require("./routes/stuff");
 const userRoutes = require("./routes/user");
@@ -34,6 +38,12 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
+//Sécurité
+app.use(helmet());
+app.use(hpp());
+app.use(expressmongoSani());
+
+//destination des images
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 //enregistrement des Applications utilisé
