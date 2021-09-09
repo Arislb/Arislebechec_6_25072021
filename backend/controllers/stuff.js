@@ -84,3 +84,41 @@ exports.getAllStuff = (req, res, next) => {
       });
     });
 };
+
+exports.likeSauce = (req, res, next) => {
+  Sauce.findOne({ _id: req.params.id })
+    .then((sauce) => {
+      switch (req.body.like) {
+        case 0:
+          if (sauce.usersLiked.includes(req.body.userId)) {
+            sauce.likes -= 1;
+            sauce.usersLiked = sauce.usersLiked.filter(
+              (userid) => userid != req.body.userId
+            );
+          } else if (sauce.usersDisliked.includes(req.body.userId)) {
+            sauce.dislikes -= 1;
+            sauce.usersDisliked = sauce.usersDisliked.filter(
+              (userid) => userid != req.body.userId
+            );
+          }
+          break;
+        case 1:
+          sauce.likes += 1;
+          sauce.usersLiked.push(req.body.userId);
+          break;
+        case -1:
+          sauce.dislikes += 1;
+          sauce.usersDisliked.push(req.body.userId);
+          break;
+        default:
+          console.log("Requête erronée");
+      }
+      sauce
+        .save()
+        .then(() => res.status(201).json({ message: "Sauce likée" }))
+        .catch((error) => res.status(400).json({ error }));
+    })
+    .catch((error) =>
+      res.status(403).json({ message: "403:unauthorized request" })
+    );
+};
