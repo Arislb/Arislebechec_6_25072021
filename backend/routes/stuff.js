@@ -7,7 +7,7 @@ const multer = require("../middleware/multer-config");
 //Middleware pour vérifier l'userID
 const auth = require("../middleware/auth");
 
-// http://localhost:3000/api
+// http://localhost:3000/api/sauces
 router.get("/", auth, stuffCtrl.getAllStuff);
 router.post("/", auth, multer, stuffCtrl.createSauce);
 router.get("/:id", auth, stuffCtrl.getOneSauce);
